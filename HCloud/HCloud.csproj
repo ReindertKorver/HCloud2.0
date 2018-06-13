@@ -172,6 +172,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Graphs.aspx" />
+    <Content Include="PortalContent\ClientData.aspx" />
     <Content Include="Resources\Aandoening.png" />
     <Content Include="Resources\AandoeningAll.png" />
     <Content Include="Resources\AandoeningNew.png" />
@@ -238,6 +239,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\qrcode.js" />
+    <Content Include="Scripts\qrcode.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\WebForms\DetailsView.js" />
@@ -321,6 +324,7 @@
     <Compile Include="Entities\DBCredentials.cs" />
     <Compile Include="Entities\Desease.cs" />
     <Compile Include="Entities\File.cs" />
+    <Compile Include="Entities\Measure.cs" />
     <Compile Include="Entities\Medication.cs" />
     <Compile Include="Entities\Rapport.cs" />
     <Compile Include="Entities\Therapy.cs" />
@@ -386,6 +390,13 @@
     </Compile>
     <Compile Include="PortalContent\AllTherapies.aspx.designer.cs">
       <DependentUpon>AllTherapies.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PortalContent\ClientData.aspx.cs">
+      <DependentUpon>ClientData.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PortalContent\ClientData.aspx.designer.cs">
+      <DependentUpon>ClientData.aspx</DependentUpon>
     </Compile>
     <Compile Include="PortalContent\DashBoard.aspx.cs">
       <DependentUpon>DashBoard.aspx</DependentUpon>

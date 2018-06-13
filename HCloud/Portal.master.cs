@@ -142,6 +142,8 @@ namespace HCloud
                     ShowNewFile.Visible = role.ShowNewFile;
 
                     ShowOwnFiles.Visible = role.ShowOwnFiles;
+
+                    ShowClientData.Visible = role.ShowClientData;
                 }
                 else
                 {
@@ -168,6 +170,7 @@ namespace HCloud
             ShowAllFiles.Visible = false;
             ShowNewFile.Visible = false;
             ShowOwnFiles.Visible = false;
+            ShowClientData.Visible = false;
         }
         public void ShowCard(string url)
         {
@@ -282,6 +285,11 @@ namespace HCloud
         protected void ShowAllFiles_Click(object sender, EventArgs e)
         {
             ShowCard("/PortalContent/AllFiles");
+        }
+
+        protected void ShowClientData_Click(object sender, EventArgs e)
+        {
+            ShowCard("/PortalContent/ClientData");
         }
     }
 }

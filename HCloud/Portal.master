@@ -77,6 +77,9 @@
                         <div class="SideNavBtnBack">
                             <asp:LinkButton runat="server" ID="ShowNewFile" OnClick="ShowNewFile_Click" CssClass="SideNavBtn"><img src="/Resources/FilesNew.png"  /><span >Nieuwe bestand</span></asp:LinkButton>
                         </div>
+                        <div class="SideNavBtnBack">
+                            <asp:LinkButton runat="server" ID="ShowClientData" OnClick="ShowClientData_Click" CssClass="SideNavBtn"><img src="/Resources/Account.png"  /><span >Cliënt gegevens</span></asp:LinkButton>
+                        </div>
                         <div style="display: inline-block;">
                         </div>
                         

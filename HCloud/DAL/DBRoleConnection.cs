@@ -14,7 +14,7 @@ namespace HCloud.DAL
 
         public Entities.Role GetUserRights(Entities.User user)
         {
-            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("Select user.RoleID, rights.ShowOwnDeseases, rights.ShowOwnTherapies, rights.ShowAllDeseases, rights.ShowAllTherapies, rights.ShowNewTherapy, rights.ShowNewDesease, rights.ShowNewMedication, rights.ShowOwnMedication, rights.ShowNewRapport, rights.ShowOwnRapports, rights.ShowAllRapports, rights.ChangeClientNAW, rights.ShowAllMedications, rights.ShowOwnFiles,rights.ShowAllFiles,rights.ShowNewFile, roles.Description from user inner join roles on roles.ID = user.RoleID inner join rights on rights.ID= roles.RightsID  where user.BsnNumber=@bsnnummer and user.UniqueID=@uniqueid", con))
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("Select user.RoleID, rights.ShowOwnDeseases, rights.ShowOwnTherapies, rights.ShowAllDeseases, rights.ShowAllTherapies, rights.ShowNewTherapy, rights.ShowNewDesease, rights.ShowNewMedication, rights.ShowOwnMedication, rights.ShowNewRapport, rights.ShowOwnRapports, rights.ShowAllRapports, rights.ChangeClientNAW, rights.ShowAllMedications, rights.ShowOwnFiles,rights.ShowAllFiles,rights.ShowNewFile,rights.ShowClientData, roles.Description from user inner join roles on roles.ID = user.RoleID inner join rights on rights.ID= roles.RightsID  where user.BsnNumber=@bsnnummer and user.UniqueID=@uniqueid", con))
             {
                 Entities.Role role = new Entities.Role();
                 cmd.Parameters.AddWithValue("@bsnnummer", user.BsnNumber ?? throw new Exception("BSN nummer is leeg"));
@@ -50,7 +50,7 @@ namespace HCloud.DAL
                         role.ShowNewFile = (bool)reader["ShowNewFile"];
                         role.ShowAllFiles = (bool)reader["ShowAllFiles"];
                         role.ShowOwnFiles = (bool)reader["ShowOwnFiles"];
-
+                        role.ShowClientData = (bool)reader["ShowClientData"];
                     }
                     con.Close();
                 }
@@ -122,7 +122,7 @@ namespace HCloud.DAL
             {
 
                 MySql.Data.MySqlClient.MySqlCommand Using;
-                Using = new MySql.Data.MySqlClient.MySqlCommand("UPDATE rights set rights.ShowAllDeseases=@ShowAllDeseases,rights.ShowAllMedications=@ShowAllMedications,rights.ShowAllRapports=@ShowAllRapports,rights.ShowAllTherapies=@ShowAllTherapies,rights.ShowNewDesease=@ShowNewDesease,rights.ShowNewMedication=@ShowNewMedication,rights.ShowNewRapport=@ShowNewRapport,rights.ShowNewTherapy=@ShowNewTherapy,rights.ShowOwnDeseases=@ShowOwnDeseases,rights.ShowOwnMedication=@ShowOwnMedication,rights.ShowOwnRapports=@ShowOwnRapports,rights.ShowOwnTherapies=@ShowOwnTherapies,rights.ChangeClientNAW=@Management,rights.ShowNewFile=@shownewfile, rights.ShowAllFiles=@showallfiles,rights.ShowOwnFiles=@showownfiles where rights.ID=@roleID", con);
+                Using = new MySql.Data.MySqlClient.MySqlCommand("UPDATE rights set rights.ShowAllDeseases=@ShowAllDeseases,rights.ShowAllMedications=@ShowAllMedications,rights.ShowAllRapports=@ShowAllRapports,rights.ShowAllTherapies=@ShowAllTherapies,rights.ShowNewDesease=@ShowNewDesease,rights.ShowNewMedication=@ShowNewMedication,rights.ShowNewRapport=@ShowNewRapport,rights.ShowNewTherapy=@ShowNewTherapy,rights.ShowOwnDeseases=@ShowOwnDeseases,rights.ShowOwnMedication=@ShowOwnMedication,rights.ShowOwnRapports=@ShowOwnRapports,rights.ShowOwnTherapies=@ShowOwnTherapies,rights.ChangeClientNAW=@Management,rights.ShowNewFile=@shownewfile, rights.ShowAllFiles=@showallfiles,rights.ShowOwnFiles=@showownfiles,rights.ShowClientData=@showclientdata where rights.ID=@roleID", con);
 
                 using (MySql.Data.MySqlClient.MySqlCommand cmd = Using)
                 {
@@ -151,6 +151,7 @@ namespace HCloud.DAL
                         cmd.Parameters.AddWithValue("@shownewfile", role.ShowNewFile);
                         cmd.Parameters.AddWithValue("@showownfiles", role.ShowOwnFiles);
                         cmd.Parameters.AddWithValue("@showallfiles", role.ShowAllFiles);
+                        cmd.Parameters.AddWithValue("@showclientdata", role.ShowClientData);
                         con.Open();
                         cmd.ExecuteNonQuery();
                         return "Succesvol opgeslagen";

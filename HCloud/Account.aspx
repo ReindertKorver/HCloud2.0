@@ -14,8 +14,8 @@
             </div>
             <div id="collapse0" class="panel-collapse collapse in">
                 <div class="panel-body">Bekijk hier uw gegevens</div>
-                <div id="UserDataDiv" style="padding-left: 50px;" runat="server">
-                    <uc1:UserDataControl id="ListPicker1" Runat="server" />
+                <div id="UserDataDiv" class="UserDataControl" style="padding-left: 50px;padding-right: 50px;" runat="server">
+                    <uc1:UserDataControl id="ListPicker1"  Runat="server" />
                 </div>
             </div>
         </div>

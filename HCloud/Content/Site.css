@@ -714,3 +714,38 @@ input, select, textarea {
     left: auto;
     cursor: move;
 }
+.ChartLine div {
+    border:none !important;
+}
+.UserDataControl a:link {
+    color: #127a7b;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+.UserDataControl a:visited {
+    color: #127a7b;
+    text-decoration: none;
+}
+
+.UserDataControl a:hover {
+    color: #127a7b;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.UserDataControl a:active {
+    color: #127a7b;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.UserDataControl a:before {
+    /* symbol for "opening" panels */
+    font-family: 'Glyphicons Halflings'; /* essential for enabling glyphicon */
+    content: "\e114";
+}
+
+.UserDataControl a.collapsed:before {
+    content: "\e080";
+}

@@ -288,7 +288,7 @@ namespace HCloud.DAL
         {
             MySql.Data.MySqlClient.MySqlCommand Using;
             Using = new MySql.Data.MySqlClient.MySqlCommand("Update user set user.RoleID=@role where user.BsnNumber=@bsn", con);
-            
+
             using (MySql.Data.MySqlClient.MySqlCommand cmd = Using)
             {
 
@@ -304,7 +304,7 @@ namespace HCloud.DAL
                 catch (Exception ex)
                 {
                     if (con.State != System.Data.ConnectionState.Closed) { con.Close(); }
-                    return "FOUT: "+ex.Message;
+                    return "FOUT: " + ex.Message;
                 }
             }
         }
@@ -353,7 +353,7 @@ namespace HCloud.DAL
             MySql.Data.MySqlClient.MySqlCommand Using;
             List<User> Users = new List<User>();
             Using = new MySql.Data.MySqlClient.MySqlCommand("SELECT * from user where user.ID=@id", con);
-            
+
             User user = new User();
             using (MySql.Data.MySqlClient.MySqlCommand cmd = Using)
             {
@@ -374,7 +374,7 @@ namespace HCloud.DAL
                         user.ID = (int)reader["ID"];
                     }
 
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -382,7 +382,7 @@ namespace HCloud.DAL
                     throw new Exception(ex.Message);
                 }
                 if (con.State != System.Data.ConnectionState.Closed) { con.Close(); }
-                
+
             }
 
             return user;
@@ -451,30 +451,103 @@ namespace HCloud.DAL
                 return userdata;
             }
         }
-        public string SetUserData(User user,string setter, string Value)
+        public string SetUserData(User user, UserData.Types setter, string Value)
         {
-
             MySql.Data.MySqlClient.MySqlCommand Using;
-            Using = new MySql.Data.MySqlClient.MySqlCommand("Update UserData set @setter=@value where userData.UserID=@userid", con);
+            Using = new MySql.Data.MySqlClient.MySqlCommand("Update UserData set UserData." + (setter.ToString() ?? throw new Exception("SetUserData setter is leeg")) + "=@value where UserData.UserID=@userid", con);
 
             using (MySql.Data.MySqlClient.MySqlCommand cmd = Using)
             {
-
                 try
                 {
-                    cmd.Parameters.AddWithValue("@setter", setter ?? throw new Exception("SetUserData setter is leeg"));
                     cmd.Parameters.AddWithValue("@value", Value ?? throw new Exception("SetUserData value is leeg"));
                     cmd.Parameters.AddWithValue("@userid", user.ID);
                     con.Open();
-                    cmd.ExecuteNonQuery();
+                    var result = cmd.ExecuteNonQuery();
+                    if (result == 0)
+                    {
+                        Using = new MySql.Data.MySqlClient.MySqlCommand("INSERT INTO `userdata` (`UserID`, `PostCode`, `Woonplaats`, `Geboorteplaats`, `Huisnummer`, `Bloedgroep`, `GeboorteDatum`, `Bankrekeningnummer`, `Provincie`, `Nationaliteit`, `Straat`) VALUES (@userid, '', '', '', '', '', '', '', '', '', '')", con);
+                        using (MySql.Data.MySqlClient.MySqlCommand cmd1 = Using)
+                        {
+                            cmd1.Parameters.AddWithValue("@userid", user.ID);
+                            var result1 = cmd1.ExecuteNonQuery();
+                            if (result1 != 0)
+                            {
+                                Using = new MySql.Data.MySqlClient.MySqlCommand("Update UserData set UserData." + (setter.ToString() ?? throw new Exception("SetUserData setter is leeg")) + "=@value where UserData.UserID=@userid", con);
+                                using (MySql.Data.MySqlClient.MySqlCommand cmd2 = Using)
+                                {
+                                    cmd2.Parameters.AddWithValue("@userid", user.ID);
+                                    var result2 = cmd1.ExecuteNonQuery();
+                                    if (result2 != 0)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        throw new Exception("Er ging iets fout: UserData was empty inserted new row and updated the row but db returned 0 rows affected");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                throw new Exception("Er ging iets fout: UserData was empty inserted new row but returned 0 ");
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        if (con.State != System.Data.ConnectionState.Closed) { con.Close(); }
+                        return "Succesvol opgeslagen";
+
+                    }
                     if (con.State != System.Data.ConnectionState.Closed) { con.Close(); }
-                    return "Succesvol opgeslagen";
+                    return "Er ging iets fout probeer opnieuw";
                 }
                 catch (Exception ex)
                 {
                     if (con.State != System.Data.ConnectionState.Closed) { con.Close(); }
                     return "FOUT: " + ex.Message;
                 }
+            }
+        }
+        public List<Measure> GetUserMeasures(User user)
+        {
+            MySql.Data.MySqlClient.MySqlCommand Using;
+            Using = new MySql.Data.MySqlClient.MySqlCommand("SELECT * from CareControl where CareControl.UserBSN=@bsn", con);
+
+            List<Measure> measures = new List<Measure>();
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = Using)
+            {
+                cmd.Parameters.AddWithValue("@bsn", user.BsnNumber ?? throw new Exception("User.BSN is leeg"));
+                try
+                {
+                    con.Open();
+                    MySqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Measure measure = new Measure();
+
+                        measure.BloodPressure = (string)reader["BloodPressure"];
+                        measure.BsnNumber = (string)reader["UserBSN"];
+                        measure.ID = (int)reader["ID"];
+                        measure.Date = (DateTime)reader["Date"];
+                        measure.Temperature = (double)reader["Temperature"];
+                        measure.TherapistID = (int)reader["TherapistID"];
+                        measures.Add(measure);
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+                    if (con.State != System.Data.ConnectionState.Closed) { con.Close(); }
+                    throw new Exception(ex.Message);
+                }
+                if (con.State != System.Data.ConnectionState.Closed) { con.Close(); }
+
+                return measures;
             }
         }
     }

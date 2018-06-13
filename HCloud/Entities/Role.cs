@@ -25,5 +25,6 @@ namespace HCloud.Entities
         public bool ShowNewFile { get; set; }
         public bool ShowAllFiles { get; set; }
         public bool ShowOwnFiles { get; set; }
+        public bool ShowClientData { get; set; }
     }
 }

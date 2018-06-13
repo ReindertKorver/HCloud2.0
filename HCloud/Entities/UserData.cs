@@ -7,6 +7,19 @@ namespace HCloud.Entities
 {
     public class UserData
     {
+        public  enum Types
+        {
+            PostCode,
+            Woonplaats,
+            Straat,
+            Huisnummer,
+            Provincie,
+            Nationaliteit,
+            Geboorteplaats,
+            GeboorteDatum,
+            Bloedgroep,
+            Bankrekeningnummer
+        }
         public int UserID { get; set; }
         public string PostCode { get; set; }
         public string Woonplaats { get; set; }
