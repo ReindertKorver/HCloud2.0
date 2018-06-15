@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="UserDataControl.ascx.cs" Inherits="HCloud.UserDataControl" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="UserDataControl.ascx.cs"   Inherits="HCloud.UserDataControl" %>
 <div class="panel-group" id="accordion1">
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -222,7 +222,7 @@
                         });
 
                         function makeCode() {
-                            qrcode.makeCode('<%=LoggedInUser.BsnNumber%>');
+                            qrcode.makeCode('<%=qrBSN%>');
                         }
                         makeCode();
                     });

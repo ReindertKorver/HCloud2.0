@@ -23,7 +23,7 @@
 
             <asp:UpdatePanel ID="ButtonsUpdater" runat="server">
                 <ContentTemplate>
-                    <div class="col-sm-2 SideNavH HCollums" runat="server" id="SideNavH" style="height: 92vh; background-color: #e2f2f2; padding-top: 3px; padding-right: unset; overflow-y: scroll;">
+                    <div class="col-sm-2 SideNavH HCollums" runat="server" id="SideNavH" style="height: 100vh; background-color: #e2f2f2; padding-top: 3px; padding-right: unset; overflow-y: scroll;    margin-bottom: -53px;">
                         <br />
                         <div class="SideNavBtnBack">
                             

@@ -49,7 +49,7 @@ namespace HCloud.DAL
 
         public bool Save(User user,File file, int userid)
         {
-            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("insert into files (files.ID,files.fileName,files.filePath,files.userID,files.fileDescription,files.Date ) values('',@filename,@filepath,@userid,@filedesc,@date)", con))
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("insert into files (files.ID,files.fileName,files.filePath,files.userID,files.fileDescription,files.Date ) values(null,@filename,@filepath,@userid,@filedesc,@date)", con))
             {
                 try
                 {

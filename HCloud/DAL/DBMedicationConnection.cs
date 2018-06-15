@@ -21,7 +21,7 @@ namespace HCloud.DAL
         /// <param name="user"></param>
         public bool Save(User user, Medication medication, int BSNNumber)
         {
-            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("insert into medications (medications.ID,medications.Description,medications.HandedOut,medications.HandedOutDate,medications.ExpirationDate,medications.BSNNumber,medications.HandedOutByID,medications.Determiner) values('',@description,0,0,0,@bsnnumber,0,@determiner)", con))
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("insert into medications (medications.ID,medications.Description,medications.HandedOut,medications.HandedOutDate,medications.ExpirationDate,medications.BSNNumber,medications.HandedOutByID,medications.Determiner) values(null,@description,0,@dateextra,@dateextra1,@bsnnumber,0,@determiner)", con))
             {
                 try
                 {
@@ -29,6 +29,8 @@ namespace HCloud.DAL
                     cmd.Parameters.AddWithValue("@description", medication.Description);
                     cmd.Parameters.AddWithValue("@bsnnumber", BSNNumber);
                     cmd.Parameters.AddWithValue("@determiner", medication.Determiner);
+                    cmd.Parameters.AddWithValue("@dateextra", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@dateextra1", DateTime.Now);
                     var result = cmd.ExecuteScalar();
                     if (result != null)
                     {

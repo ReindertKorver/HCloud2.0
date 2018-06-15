@@ -8,74 +8,57 @@ using System.Web.UI.WebControls;
 
 namespace HCloud
 {
+    [System.ComponentModel.DefaultProperty("Data")]
     public partial class UserDataControl : System.Web.UI.UserControl
     {
-        public Entities.User LoggedInUser;
+        
+        public string qrBSN;
+        public User Data { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["User"] != null)
+            if (Data != null)
             {
-                LoggedInUser = Session["User"] as Entities.User;
-                if (LoggedInUser != null)
+                Session["UserData"] = Data;
+
+                //get user measures from database
+                if (!IsPostBack)
                 {
-                    BLL.LogInHelper logInHelper = new BLL.LogInHelper();
-                    Entities.User result = new Entities.User();
-                    try
+                    qrBSN = Data.BsnNumber;
+                    List<Measure> measures = dBUserConnection.GetUserMeasures(Data);
+                    List<string> items = new List<string>();
+                    List<string> itemsCategories = new List<string>();
+                    List<decimal> itemSeries = new List<decimal>();
+                    foreach (var measure in measures)
                     {
-                        result = logInHelper.LoginAtPageLoad(LoggedInUser);
-                    }
-                    catch (Exception ex)
-                    {
-                        Response.Redirect("/SignIn");
-                    }
-                    if (result != null)
-                    {
-                        //get user measures from database
-                        if (!IsPostBack)
-                        {
-                            List<Measure> measures = dBUserConnection.GetUserMeasures(LoggedInUser);
-                            List<string> items = new List<string>();
-                            List<string> itemsCategories = new List<string>();
-                            List<decimal> itemSeries = new List<decimal>();
-                            foreach (var measure in measures)
-                            {
-                                items.Add(measure.Date.ToString("dd/MM/yyyy hh:mm") + " | Temperatuur: " + measure.Temperature.ToString() + " Bloeddruk: " + measure.BloodPressure);
-                                itemSeries.Add(Convert.ToDecimal(measure.Temperature));
-                                itemsCategories.Add(measure.Date.ToString("dd MMMM hh:mm"));
-
-                            }
-                            CareControlMeasuresLineChart.Series.Add(new AjaxControlToolkit.LineChartSeries() { Data = itemSeries.ToArray(), Name = "Temperatuur in Celsius", LineColor = "#127a7b" });
-
-                            CareControlMeasures.DataSource = items;
-                            CareControlMeasures.DataBind();
-                            CareControlMeasuresLineChart.CategoriesAxis = string.Join(",", itemsCategories.ToArray());
-                            CareControlMeasuresLineChart.DataBind();
-                            UserData data = UserData.GetUserDataFromDB(LoggedInUser);
-                            fillUserData(data);
-                        }
-                        //get the user data from database
-
+                        items.Add(measure.Date.ToString("dd/MM/yyyy hh:mm") + " | Temperatuur: " + measure.Temperature.ToString() + " Bloeddruk: " + measure.BloodPressure);
+                        itemSeries.Add(Convert.ToDecimal(measure.Temperature));
+                        itemsCategories.Add(measure.Date.ToString("dd MMMM hh:mm"));
 
                     }
-                    else
-                    {
+                    CareControlMeasuresLineChart.Series.Add(new AjaxControlToolkit.LineChartSeries() { Data = itemSeries.ToArray(), Name = "Temperatuur in Celsius", LineColor = "#127a7b" });
 
-                        Response.Redirect("/SignIn");
-                    }
+                    CareControlMeasures.DataSource = items;
+                    CareControlMeasures.DataBind();
+                    CareControlMeasuresLineChart.CategoriesAxis = string.Join(",", itemsCategories.ToArray());
+                    CareControlMeasuresLineChart.DataBind();
+                    UserData data = UserData.GetUserDataFromDB(Data);
+                    fillUserData(data);
                 }
-                else
-                {
 
-                    Response.Redirect("/SignIn");
-                }
             }
             else
             {
-                Response.Redirect("/SignIn");
+                //userdata=null
+
+                if (Session["UserData"] != null)
+                {
+                    Data = Session["UserData"] as User;
+                }
             }
 
-
         }
+
+
         public void fillUserData(UserData data)
         {
             PostCode.Text = data.PostCode ?? "Geen";
@@ -99,170 +82,210 @@ namespace HCloud
         DAL.DBUserConnection dBUserConnection = new DAL.DBUserConnection();
         protected void PostCodeSave_Click(object sender, EventArgs e)
         {
-            try
+            if (Data != null)
             {
-                if (!string.IsNullOrEmpty(PostCodeTXT.Text))
+                try
                 {
-                    showMessage(dBUserConnection.SetUserData(Session["User"] as Entities.User, UserData.Types.PostCode, PostCodeTXT.Text));
+
+                    if (!string.IsNullOrEmpty(PostCodeTXT.Text))
+                    {
+                        showMessage(dBUserConnection.SetUserData(Data, UserData.Types.PostCode, PostCodeTXT.Text));
+                    }
+                    else
+                    {
+                        throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    }
+
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    showMessage(ex.Message);
                 }
+                UserData data = UserData.GetUserDataFromDB(Data);
+                fillUserData(data);
             }
-            catch (Exception ex)
-            {
-                showMessage(ex.Message);
-            }
-            UserData data = UserData.GetUserDataFromDB(LoggedInUser);
-            fillUserData(data);
         }
 
         protected void StraatSave_Click(object sender, EventArgs e)
         {
-            try
+            if (Data != null)
             {
-                if (!string.IsNullOrEmpty(PostCodeTXT.Text))
+                try
                 {
-                    showMessage(dBUserConnection.SetUserData(Session["User"] as Entities.User, UserData.Types.Straat, StraatTXT.Text));
+
+                    if (!string.IsNullOrEmpty(StraatTXT.Text))
+                    {
+                        showMessage(dBUserConnection.SetUserData(Data, UserData.Types.Straat, StraatTXT.Text));
+                    }
+                    else
+                    {
+                        throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    }
+
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    showMessage(ex.Message);
                 }
+                UserData data = UserData.GetUserDataFromDB(Data);
+                fillUserData(data);
             }
-            catch (Exception ex)
-            {
-                showMessage(ex.Message);
-            }
-            UserData data = UserData.GetUserDataFromDB(LoggedInUser);
-            fillUserData(data);
         }
 
         protected void HuisnummerSave_Click(object sender, EventArgs e)
         {
-            try
+            if (Data != null)
             {
-                if (!string.IsNullOrEmpty(HuisnummerTXT.Text))
+                try
                 {
-                    showMessage(dBUserConnection.SetUserData(Session["User"] as Entities.User, UserData.Types.Huisnummer, HuisnummerTXT.Text));
+
+                    if (!string.IsNullOrEmpty(HuisnummerTXT.Text))
+                    {
+                        showMessage(dBUserConnection.SetUserData(Data, UserData.Types.Huisnummer, HuisnummerTXT.Text));
+                    }
+                    else
+                    {
+                        throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    }
+
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    showMessage(ex.Message);
                 }
+                UserData data = UserData.GetUserDataFromDB(Data);
+                fillUserData(data);
             }
-            catch (Exception ex)
-            {
-                showMessage(ex.Message);
-            }
-            UserData data = UserData.GetUserDataFromDB(LoggedInUser);
-            fillUserData(data);
         }
 
         protected void WoonplaatsSave_Click(object sender, EventArgs e)
         {
-            try
+            if (Data != null)
             {
-                if (!string.IsNullOrEmpty(WoonplaatsTXT.Text))
+                try
                 {
-                    showMessage(dBUserConnection.SetUserData(Session["User"] as Entities.User, UserData.Types.Woonplaats, WoonplaatsTXT.Text));
+
+                    if (!string.IsNullOrEmpty(WoonplaatsTXT.Text))
+                    {
+                        showMessage(dBUserConnection.SetUserData(Data, UserData.Types.Woonplaats, WoonplaatsTXT.Text));
+                    }
+                    else
+                    {
+                        throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    }
+
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    showMessage(ex.Message);
                 }
+                UserData data = UserData.GetUserDataFromDB(Data);
+                fillUserData(data);
             }
-            catch (Exception ex)
-            {
-                showMessage(ex.Message);
-            }
-            UserData data = UserData.GetUserDataFromDB(LoggedInUser);
-            fillUserData(data);
         }
 
         protected void GeboorteplaatsSave_Click(object sender, EventArgs e)
         {
-            try
+            if (Data != null)
             {
-                if (!string.IsNullOrEmpty(GeboorteplaatsTXT.Text))
+                try
                 {
-                    showMessage(dBUserConnection.SetUserData(Session["User"] as Entities.User, UserData.Types.Geboorteplaats, GeboorteplaatsTXT.Text));
+
+                    if (!string.IsNullOrEmpty(GeboorteplaatsTXT.Text))
+                    {
+                        showMessage(dBUserConnection.SetUserData(Data, UserData.Types.Geboorteplaats, GeboorteplaatsTXT.Text));
+                    }
+                    else
+                    {
+                        throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    }
+
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    showMessage(ex.Message);
                 }
+                UserData data = UserData.GetUserDataFromDB(Data);
+                fillUserData(data);
             }
-            catch (Exception ex)
-            {
-                showMessage(ex.Message);
-            }
-            UserData data = UserData.GetUserDataFromDB(LoggedInUser);
-            fillUserData(data);
         }
 
         protected void BloedgroepSave_Click(object sender, EventArgs e)
         {
-            try
+            if (Data != null)
             {
-                if (!string.IsNullOrEmpty(BloedgroepTXT.Text))
+                try
                 {
-                    showMessage(dBUserConnection.SetUserData(Session["User"] as Entities.User, UserData.Types.Bloedgroep, BloedgroepTXT.Text));
+
+                    if (!string.IsNullOrEmpty(BloedgroepTXT.Text))
+                    {
+                        showMessage(dBUserConnection.SetUserData(Data, UserData.Types.Bloedgroep, BloedgroepTXT.Text));
+                    }
+                    else
+                    {
+                        throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    }
+
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    showMessage(ex.Message);
                 }
+                UserData data = UserData.GetUserDataFromDB(Data);
+                fillUserData(data);
             }
-            catch (Exception ex)
-            {
-                showMessage(ex.Message);
-            }
-            UserData data = UserData.GetUserDataFromDB(LoggedInUser);
-            fillUserData(data);
         }
 
         protected void GeboorteDatumSave_Click(object sender, EventArgs e)
         {
-            try
+            if (Data != null)
             {
-                if (!string.IsNullOrEmpty(GeboorteDatumTXT.Text))
+                try
                 {
-                    showMessage(dBUserConnection.SetUserData(Session["User"] as Entities.User, UserData.Types.GeboorteDatum, GeboorteDatumTXT.Text));
+
+                    if (!string.IsNullOrEmpty(GeboorteDatumTXT.Text))
+                    {
+                        showMessage(dBUserConnection.SetUserData(Data, UserData.Types.GeboorteDatum, GeboorteDatumTXT.Text));
+                    }
+                    else
+                    {
+                        throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    }
+
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    showMessage(ex.Message);
                 }
+                UserData data = UserData.GetUserDataFromDB(Data);
+                fillUserData(data);
             }
-            catch (Exception ex)
-            {
-                showMessage(ex.Message);
-            }
-            UserData data = UserData.GetUserDataFromDB(LoggedInUser);
-            fillUserData(data);
         }
 
         protected void BankrekeningSave_Click(object sender, EventArgs e)
         {
-            try
+            if (Data != null)
             {
-                if (!string.IsNullOrEmpty(BankrekeningnummerTXT.Text))
+                try
                 {
-                    showMessage(dBUserConnection.SetUserData(Session["User"] as Entities.User, UserData.Types.Bankrekeningnummer, BankrekeningnummerTXT.Text));
+
+                    if (!string.IsNullOrEmpty(BankrekeningnummerTXT.Text))
+                    {
+                        showMessage(dBUserConnection.SetUserData(Data, UserData.Types.Bankrekeningnummer, BankrekeningnummerTXT.Text));
+                    }
+                    else
+                    {
+                        throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    }
+
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    showMessage(ex.Message);
                 }
+                UserData data = UserData.GetUserDataFromDB(Data);
+                fillUserData(data);
             }
-            catch (Exception ex)
-            {
-                showMessage(ex.Message);
-            }
-            UserData data = UserData.GetUserDataFromDB(LoggedInUser);
-            fillUserData(data);
         }
         void showMessage(string text)
         {
@@ -271,44 +294,54 @@ namespace HCloud
 
         protected void ProvincieSave_Click(object sender, EventArgs e)
         {
-            try
+            if (Data != null)
             {
-                if (!string.IsNullOrEmpty(ProvincieTXT.Text))
+                try
                 {
-                    showMessage(dBUserConnection.SetUserData(Session["User"] as Entities.User, UserData.Types.Provincie, ProvincieTXT.Text));
+
+                    if (!string.IsNullOrEmpty(ProvincieTXT.Text))
+                    {
+                        showMessage(dBUserConnection.SetUserData(Data, UserData.Types.Provincie, ProvincieTXT.Text));
+                    }
+                    else
+                    {
+                        throw new Exception("Vul wel iets in voor op opslaan te klikken");
+
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    showMessage(ex.Message);
                 }
+                UserData data = UserData.GetUserDataFromDB(Data);
+                fillUserData(data);
             }
-            catch (Exception ex)
-            {
-                showMessage(ex.Message);
-            }
-            UserData data = UserData.GetUserDataFromDB(LoggedInUser);
-            fillUserData(data);
         }
 
         protected void NationaliteitSave_Click(object sender, EventArgs e)
         {
-            try
+            if (Data != null)
             {
-                if (!string.IsNullOrEmpty(NationaliteitTXT.Text))
+                try
                 {
-                    showMessage(dBUserConnection.SetUserData(Session["User"] as Entities.User, UserData.Types.Nationaliteit, NationaliteitTXT.Text));
+
+                    if (!string.IsNullOrEmpty(NationaliteitTXT.Text))
+                    {
+                        showMessage(dBUserConnection.SetUserData(Data, UserData.Types.Nationaliteit, NationaliteitTXT.Text));
+                    }
+                    else
+                    {
+                        throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    }
+
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw new Exception("Vul wel iets in voor op opslaan te klikken");
+                    showMessage(ex.Message);
                 }
+                UserData data = UserData.GetUserDataFromDB(Data);
+                fillUserData(data);
             }
-            catch (Exception ex)
-            {
-                showMessage(ex.Message);
-            }
-            UserData data = UserData.GetUserDataFromDB(LoggedInUser);
-            fillUserData(data);
         }
     }
 }

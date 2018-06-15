@@ -292,7 +292,7 @@ namespace HCloud.DAL
         public bool Save(User user, Therapy therapy, Medication medication, Desease desease, int BSNNumber)
         {
 
-            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("insert into therapies (therapies.ID,therapies.Description,therapies.MedicationID,therapies.DeseaseID,therapies.TherapistID,therapies.Date,therapies.Time,therapies.BSNNumber,therapies.Costs,therapies.Location) values('',@description,@medicationID,@deseaseID,@therapistID,@date,@endtime,@bsnnumber,@costs,@location)", con))
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("insert into therapies (therapies.ID,therapies.Description,therapies.MedicationID,therapies.DeseaseID,therapies.TherapistID,therapies.Date,therapies.Time,therapies.BSNNumber,therapies.Costs,therapies.Location) values(0,@description,@medicationID,@deseaseID,@therapistID,@date,@endtime,@bsnnumber,@costs,@location)", con))
             {
                 try
                 {

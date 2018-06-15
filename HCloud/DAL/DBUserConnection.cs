@@ -21,7 +21,7 @@ namespace HCloud.DAL
         /// <param name="user"></param>
         public void AddUser(Entities.User user)
         {
-            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("INSERT INTO user VALUES ('',@BsnNumber, @PhoneNumber,@FirstName,@LastName,@EmailAdress,@PasswordHash,@Confirmed,@UniqueID,0,0)", con))
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("INSERT INTO user VALUES (0,@BsnNumber, @PhoneNumber,@FirstName,@LastName,@EmailAdress,@PasswordHash,@Confirmed,@UniqueID,0,0)", con))
             {
                 cmd.Parameters.AddWithValue("@BsnNumber", user.BsnNumber ?? throw new Exception("BSN nummer is leeg"));
                 cmd.Parameters.AddWithValue("@PhoneNumber", user.PhoneNumber ?? "");
@@ -454,7 +454,7 @@ namespace HCloud.DAL
         public string SetUserData(User user, UserData.Types setter, string Value)
         {
             MySql.Data.MySqlClient.MySqlCommand Using;
-            Using = new MySql.Data.MySqlClient.MySqlCommand("Update UserData set UserData." + (setter.ToString() ?? throw new Exception("SetUserData setter is leeg")) + "=@value where UserData.UserID=@userid", con);
+            Using = new MySql.Data.MySqlClient.MySqlCommand("Update userdata set userdata." + (setter.ToString() ?? throw new Exception("SetUserData setter is leeg")) + "=@value where userdata.UserID=@userid", con);
 
             using (MySql.Data.MySqlClient.MySqlCommand cmd = Using)
             {
@@ -473,7 +473,7 @@ namespace HCloud.DAL
                             var result1 = cmd1.ExecuteNonQuery();
                             if (result1 != 0)
                             {
-                                Using = new MySql.Data.MySqlClient.MySqlCommand("Update UserData set UserData." + (setter.ToString() ?? throw new Exception("SetUserData setter is leeg")) + "=@value where UserData.UserID=@userid", con);
+                                Using = new MySql.Data.MySqlClient.MySqlCommand("Update userdata set userdata." + (setter.ToString() ?? throw new Exception("SetUserData setter is leeg")) + "=@value where userdata.UserID=@userid", con);
                                 using (MySql.Data.MySqlClient.MySqlCommand cmd2 = Using)
                                 {
                                     cmd2.Parameters.AddWithValue("@userid", user.ID);
@@ -514,7 +514,7 @@ namespace HCloud.DAL
         public List<Measure> GetUserMeasures(User user)
         {
             MySql.Data.MySqlClient.MySqlCommand Using;
-            Using = new MySql.Data.MySqlClient.MySqlCommand("SELECT * from CareControl where CareControl.UserBSN=@bsn", con);
+            Using = new MySql.Data.MySqlClient.MySqlCommand("SELECT * from carecontrol where carecontrol.UserBSN=@bsn", con);
 
             List<Measure> measures = new List<Measure>();
             using (MySql.Data.MySqlClient.MySqlCommand cmd = Using)

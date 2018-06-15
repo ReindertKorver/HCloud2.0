@@ -109,7 +109,7 @@ namespace HCloud.DAL
         //Saves a Desease
         public bool Save(User user, Desease desease, int bsnNumber)
         {
-            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("insert into deseases (ID,BSNNumber,Description,DeterminerID,Date,DeclaredHealthy,DeclaredHealthyDate) values('',@bsnnumber,@description,@determiner,@date,0,0)", con))
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("insert into deseases (ID,BSNNumber,Description,DeterminerID,Date,DeclaredHealthy,DeclaredHealthyDate) values(null,@bsnnumber,@description,@determiner,@date,false,@dateextra)", con))
             {
                 try
                 {
@@ -118,6 +118,7 @@ namespace HCloud.DAL
                     cmd.Parameters.AddWithValue("@bsnnumber", bsnNumber);
                     cmd.Parameters.AddWithValue("@determiner", desease.determiner);
                     cmd.Parameters.AddWithValue("@date", desease.date);
+                        cmd.Parameters.AddWithValue("@dateextra", DateTime.Now);
                     var result = cmd.ExecuteScalar();
                     if (result != null)
                     {
