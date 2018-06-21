@@ -78,17 +78,27 @@ namespace HCloud
                 therapy.date = Convert.ToDateTime(NewTherapyDate.Text);
                 therapy.Time = TimeSpan.Parse(NewTherapyEndTime.Text);
                 therapy.description = NewTherapyDescriptionTB.Text;
-                therapy.Location = Location.Text??"";
-                therapy.CostsInEuro = Convert.ToDecimal(Costs.Text??"0", CultureInfo.InvariantCulture);
+                therapy.Location = Location.Text ?? "";
+                therapy.CostsInEuro = Convert.ToDecimal(Costs.Text ?? "0", CultureInfo.InvariantCulture);
                 Desease desease = new Desease();
                 desease.ID = Convert.ToInt32(NewDesease.SelectedValue);
                 Medication medication = new Medication();
                 medication.ID = Convert.ToInt32(NewMedicationDDL.SelectedValue);
-                bool result = dBTherapy.Save(LoggedInUser,therapy,medication,desease, Convert.ToInt32(NewTherapyClient.SelectedValue));
-                if (result)
-                    lbl.Text = "Behandeling is succesvol opgeslagen";
+
+               
+                if (dBTherapy.IsTherapyAllowed(LoggedInUser, therapy, NewTherapyClient.SelectedValue))
+                {
+                    bool result = dBTherapy.Save(LoggedInUser, therapy, medication, desease, NewTherapyClient.SelectedValue);
+                    if (result)
+                        lbl.Text = "Behandeling is succesvol opgeslagen";
+                    else
+                        lbl.Text = "Er is iets fout gegaan";
+                }
                 else
-                    lbl.Text = "Er is iets fout gegaan";
+                {
+                    lbl.Text = "De behandelaar of de cliënt heeft al een behandeling gepland in het ingevuld tijdsbestek";
+                }
+
             }
             catch (Exception ex)
             {

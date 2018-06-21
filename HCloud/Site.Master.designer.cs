@@ -13,13 +13,13 @@ namespace HCloud {
     public partial class SiteMaster {
         
         /// <summary>
-        /// LogginLink control.
+        /// ProfileImg control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor LogginLink;
+        protected global::System.Web.UI.WebControls.Image ProfileImg;
         
         /// <summary>
         /// LoggedInUserLbl control.
@@ -29,6 +29,33 @@ namespace HCloud {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label LoggedInUserLbl;
+        
+        /// <summary>
+        /// LogginLink control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor LogginLink;
+        
+        /// <summary>
+        /// Logout control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Logout;
+        
+        /// <summary>
+        /// LogoutBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton LogoutBtn;
         
         /// <summary>
         /// MainContent control.

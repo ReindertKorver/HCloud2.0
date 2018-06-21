@@ -12,14 +12,44 @@ namespace HCloud
     {
         public static string qrBSN;
         public static User Data { get; set; }
+        public static User LoggedInUser { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (IsPostBack && ProfileImageUpload.PostedFile != null)
+            {
+                if (ProfileImageUpload.PostedFile.FileName.Length > 0)
+                {
+                    try
+                    {
+
+                        bool DirExists = System.IO.Directory.Exists(Server.MapPath("/Files/" + LoggedInUser.UniqueUserID + "/PF"));
+                        if (!DirExists)
+                        {
+                            System.IO.Directory.CreateDirectory(Server.MapPath("/Files/" + LoggedInUser.UniqueUserID + "/PF"));
+                        }
+
+                        ProfileImageUpload.SaveAs(Server.MapPath("/Files/" + LoggedInUser.UniqueUserID + "/PF/" + ProfileImageUpload.FileName));
+                        string location = "/Files/" + LoggedInUser.UniqueUserID + "/PF/" + ProfileImageUpload.FileName;
+                        DAL.DBUserConnection dBUserConnection = new DAL.DBUserConnection();
+                        string result = dBUserConnection.SetUserData(LoggedInUser,UserData.Types.ProfilePicUrl,location);
+                        ShowPFMessage(result+"<br/>Wanneer u opnieuw inlogd zal de foto zichtbaar zijn.","Resultaat");
+                        ProfileImageUpload.Dispose();
+                        ProfileImageUpload.PostedFile.InputStream.Dispose();
+                        ProfileImageUpload.Attributes.Clear();
+                    }
+                    catch (Exception ex)
+                    {
+                        ShowPFMessage("Fout:"+ex.Message, "Resultaat");
+                    }
+                }
+            }
             if (!IsPostBack)
             {
+                messagerPF.Style.Add("display", "none!important");
                 if (Session["User"] != null)
                 {
-                    Entities.User LoggedInUser = Session["User"] as Entities.User;
-                    
+                    LoggedInUser = Session["User"] as Entities.User;
+
                     if (LoggedInUser != null)
                     {
                         BLL.LogInHelper logInHelper = new BLL.LogInHelper();
@@ -62,6 +92,20 @@ namespace HCloud
                                     CareControlMeasuresLineChart.CategoriesAxis = string.Join(",", itemsCategories.ToArray());
                                     CareControlMeasuresLineChart.DataBind();
                                     UserData data = UserData.GetUserDataFromDB(Data);
+                                    DAL.DBRoleConnection dBRoleConnection = new DAL.DBRoleConnection();
+                                    string roleDescription = null;
+                                    try
+                                    {
+                                        var resultRights = dBRoleConnection.GetUserRights(LoggedInUser);
+                                        roleDescription = "<br/>Rol: " + resultRights.Description;
+                                    }
+                                    catch (Exception)
+                                    {
+
+                                    }
+                                    ProfileInformation.InnerHtml = "";
+                                    ProfileInformation.InnerHtml = "E-mailadress: " + LoggedInUser.EmailAdress + "<br/>Telefoonummer: " + LoggedInUser.PhoneNumber + "<br/>BSN nummer: " + LoggedInUser.BsnNumber + (roleDescription ?? "");
+                                    UserName.Text = LoggedInUser.FirstName + " " + LoggedInUser.LastName;
                                     fillUserData(data);
                                 }
 
@@ -84,7 +128,12 @@ namespace HCloud
                     Response.Redirect("/SignIn");
                 }
             }
-            
+
+        }
+        public void ShowPFMessage(string message, string title)
+        {
+            messagerPF.InnerHtml = "<b>"+title+"</b><br/>"+message;
+            messagerPF.Style.Add("display", "block!important");
         }
         protected void LogOut_Click(object sender, EventArgs e)
         {
@@ -109,6 +158,7 @@ namespace HCloud
             {
                 GeboorteDatum.Text = "Geen";
             }
+            ProfileImage.ImageUrl = data.ProfilePicUrl ?? "Resources/Account.png";
             Geboorteplaats.Text = data.Geboorteplaats ?? "Geen";
             Huisnummer.Text = data.Huisnummer ?? "Geen";
             Nationaliteit.Text = data.Nationaliteit ?? "Geen";

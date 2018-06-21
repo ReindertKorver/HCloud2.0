@@ -289,10 +289,10 @@ namespace HCloud.DAL
         public void Delete(User user)
         {
         }
-        public bool Save(User user, Therapy therapy, Medication medication, Desease desease, int BSNNumber)
+        public bool Save(User user, Therapy therapy, Medication medication, Desease desease, string BSNNumber)
         {
 
-            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("insert into therapies (therapies.ID,therapies.Description,therapies.MedicationID,therapies.DeseaseID,therapies.TherapistID,therapies.Date,therapies.Time,therapies.BSNNumber,therapies.Costs,therapies.Location) values(0,@description,@medicationID,@deseaseID,@therapistID,@date,@endtime,@bsnnumber,@costs,@location)", con))
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("insert into therapies (therapies.ID,therapies.Description,therapies.MedicationID,therapies.DeseaseID,therapies.TherapistID,therapies.Date,therapies.Time,therapies.DateEnd,therapies.BSNNumber,therapies.Costs,therapies.Location,therapies.Accepted) values(0,@description,@medicationID,@deseaseID,@therapistID,@date,@endtime,@dateend,@bsnnumber,@costs,@location,0)", con))
             {
                 try
                 {
@@ -304,6 +304,7 @@ namespace HCloud.DAL
                     cmd.Parameters.AddWithValue("@therapistID", user.ID);
                     cmd.Parameters.AddWithValue("@date", therapy.date);
                     cmd.Parameters.AddWithValue("@endtime", therapy.Time);
+                    cmd.Parameters.AddWithValue("@dateend", therapy.date + therapy.Time);
                     cmd.Parameters.AddWithValue("@costs", MySqlDbType.Decimal).Value = therapy.CostsInEuro;
                     cmd.Parameters.AddWithValue("@location", therapy.Location);
                     var result = cmd.ExecuteScalar();
@@ -320,6 +321,79 @@ namespace HCloud.DAL
                 if (con.State != System.Data.ConnectionState.Closed) { con.Close(); }
             }
             return true;
+        }
+        /// <summary>
+        /// Checks if the therapy can fit in the other therapies that the client and the therapist have
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="therapy"></param>
+        /// <returns></returns>
+        public bool IsTherapyAllowed(User user, Therapy therapy, string BSN)
+        {
+            try
+            {
+
+                List<Therapy> therapies = new List<Therapy>();
+                using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("select therapies.ID,therapies.BSNNumber,therapies.TherapistID  from therapies  where" +
+                    "(@startDate between Date and DateEnd) " +
+                    "OR (@endDate between Date and DateEnd) " +
+                    "OR (Date between @startDate and @endDate) " +
+                    "OR (DateEnd between @startDate and @endDate )", con))
+                {
+                    cmd.Parameters.AddWithValue("@startDate", therapy.date);
+                    cmd.Parameters.AddWithValue("@endDate", therapy.date + therapy.Time);
+                    cmd.Parameters.AddWithValue("@therapist", user.ID);
+                    cmd.Parameters.AddWithValue("@bsn", BSN);
+                    con.Open();
+                    MySqlDataReader reader = cmd.ExecuteReader();
+                    List<Therapy> result = new List<Therapy>();
+                    while (reader.Read())
+                    {
+                        Therapy nwtherapy = new Therapy();
+                        nwtherapy.ID = (int)reader["ID"];
+                        nwtherapy.therapistID = (int)reader["TherapistID"];
+                        //fill description with bsn
+                        nwtherapy.description = ((int)reader["BSNNumber"]).ToString();
+
+                        result.Add(nwtherapy);
+                    }
+                    if (con.State != System.Data.ConnectionState.Closed) { con.Close(); }
+                    if (result != null)
+                    {
+                        List<bool> bl = new List<bool>();
+                        foreach (var item in result)
+                        {
+
+                            if ((item.therapistID != user.ID)==true && (item.description != BSN)==true)
+                            {
+                                bl.Add(true);   
+                            }
+                            else
+                            {
+                                bl.Add(false);
+                            }
+                        }
+                        if(bl.Contains(false))
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
         }
     }
 }

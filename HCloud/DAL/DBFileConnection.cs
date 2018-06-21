@@ -55,7 +55,7 @@ namespace HCloud.DAL
                 {
                     con.Open();
                     cmd.Parameters.AddWithValue("@filename", file.FileName);
-                    cmd.Parameters.AddWithValue("@filepath", file.FilePath);
+                    cmd.Parameters.AddWithValue("@filepath", Uri.EscapeUriString(file.FilePath));
                     cmd.Parameters.AddWithValue("@userid",userid);
                     cmd.Parameters.AddWithValue("@filedesc", file.Description);
                     cmd.Parameters.AddWithValue("@date", DateTime.Now);

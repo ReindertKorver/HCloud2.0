@@ -45,6 +45,9 @@
                 </div>
             </div>
         </div>
+        <div class="FilesTopBarItem">
+            <asp:DropDownList runat="server" ID="SortBy" OnSelectedIndexChanged="SortBy_SelectedIndexChanged" CssClass="SortbyDropDown" AutoPostBack="true"></asp:DropDownList>
+        </div>
     </div>
     <div class="FilesMain" runat="server" id="FilesMain">
         

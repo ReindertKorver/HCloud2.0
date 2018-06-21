@@ -12,9 +12,9 @@
         <%: Scripts.Render("~/bundles/modernizr") %>
     </asp:PlaceHolder>
 
-    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <webopt:BundleReference runat="server" Path="~/Content/css" />
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
     <link href="Resources/Logo_Small.png" rel="shortcut icon" type="image/x-icon" />
     <script src="/Scripts/JavaScript.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
@@ -56,12 +56,33 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li><a runat="server" href="~/">Home</a></li>
-                         <li><a runat="server" href="RegisterNew.aspx">Registreren</a></li>
-                        <li><a runat="server" id="LogginLink" style="color:white; text-decoration:none;"  href="~/"><asp:Label runat="server" id="LoggedInUserLbl" Text=""></asp:Label></a></li>
+                        <li><a runat="server" href="RegisterNew.aspx">Registreren</a></li>
+                        <li >
+                             <div id="ImgDivTopBar">
+                                    <asp:Image runat="server" ID="ProfileImg" Style="" />
+                                </div>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true" style="float:right; color:white;" >
+                               
+                                <asp:Label runat="server" ID="LoggedInUserLbl" Text=""></asp:Label><span style=" border-top-color: #0b4445; border-bottom-color: #0b4445;" class="caret"></span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a runat="server" id="LogginLink"  href="#">
+                                        Account
+                                    </a>
+                                </li>
+                                <li id="Logout" runat="server">
+                                    <asp:LinkButton runat="server" id="LogoutBtn" OnClick="Logout_Click">
+                                        Uitloggen
+                                    </asp:LinkButton>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
-                </div> 
+                </div>
             </div>
-           
+
         </div>
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">

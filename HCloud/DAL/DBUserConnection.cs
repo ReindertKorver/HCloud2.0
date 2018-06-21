@@ -88,6 +88,7 @@ namespace HCloud.DAL
                         usercredentials.PassWordHash = (string)reader["PasswordHash"];
                         usercredentials.Confirmed = (bool)reader["Confirmed"];
                         usercredentials.UniqueUserID = (string)reader["UniqueID"];
+                        usercredentials.PhoneNumber = (string)reader["PhoneNumber"];
                         usercredentials.FirstName = (string)reader["FirstName"];
                         usercredentials.LastName = (string)reader["LastName"];
                         usercredentials.BsnNumber = (string)reader["BsnNumber"];
@@ -438,6 +439,7 @@ namespace HCloud.DAL
                         userdata.Provincie = (string)reader["Provincie"];
                         userdata.Straat = (string)reader["Straat"];
                         userdata.Woonplaats = (string)reader["Woonplaats"];
+                        userdata.ProfilePicUrl = (string)reader["ProfilePicUrl"];
                     }
 
 
@@ -466,10 +468,11 @@ namespace HCloud.DAL
                     var result = cmd.ExecuteNonQuery();
                     if (result == 0)
                     {
-                        Using = new MySql.Data.MySqlClient.MySqlCommand("INSERT INTO `userdata` (`UserID`, `PostCode`, `Woonplaats`, `Geboorteplaats`, `Huisnummer`, `Bloedgroep`, `GeboorteDatum`, `Bankrekeningnummer`, `Provincie`, `Nationaliteit`, `Straat`) VALUES (@userid, '', '', '', '', '', '', '', '', '', '')", con);
+                        Using = new MySql.Data.MySqlClient.MySqlCommand("INSERT INTO `userdata` (`UserID`, `PostCode`, `Woonplaats`, `Geboorteplaats`, `Huisnummer`, `Bloedgroep`, `GeboorteDatum`, `Bankrekeningnummer`, `Provincie`, `Nationaliteit`, `Straat`,`ProfilePicUrl`) VALUES (@userid, '', '', '', '', '', @gbdate, '', '', '', '','')", con);
                         using (MySql.Data.MySqlClient.MySqlCommand cmd1 = Using)
                         {
                             cmd1.Parameters.AddWithValue("@userid", user.ID);
+                            cmd1.Parameters.AddWithValue("@gbdate", DateTime.MinValue);
                             var result1 = cmd1.ExecuteNonQuery();
                             if (result1 != 0)
                             {

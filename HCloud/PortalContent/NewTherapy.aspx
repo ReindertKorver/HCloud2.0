@@ -29,7 +29,7 @@
    
     <div class="row">
         <div class="col-xs-3">
-            <b>Datum:</b><br />
+            <b>Datum en tijd:</b><br />
             <asp:TextBox ID="NewTherapyDate" TextMode="DateTimeLocal" CssClass="form-control " runat="server"></asp:TextBox>
             <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator4" ControlToValidate="NewTherapyDate"  ValidationGroup='NewTherapyValidation' ErrorMessage="Vul een datum in!" Style="color: red;" /><br />
         </div>

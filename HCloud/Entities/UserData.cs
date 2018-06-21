@@ -18,7 +18,8 @@ namespace HCloud.Entities
             Geboorteplaats,
             GeboorteDatum,
             Bloedgroep,
-            Bankrekeningnummer
+            Bankrekeningnummer,
+            ProfilePicUrl
         }
         public int UserID { get; set; }
         public string PostCode { get; set; }
@@ -29,7 +30,7 @@ namespace HCloud.Entities
         public string Nationaliteit { get; set; }
         public string Geboorteplaats { get; set; }
         public DateTime GeboorteDatum { get; set; }
-
+        public string ProfilePicUrl { get; set; }
         public string Bloedgroep { get; set; }
         public string Bankrekeningnummer { get; set; }
         public static UserData GetUserDataFromDB(User LoggedInUser)

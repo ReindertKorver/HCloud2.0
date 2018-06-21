@@ -35,7 +35,17 @@ textarea {
     border-color: #ffffff;
     color: white;
 }
-
+.dropdown-menu > li > a{
+    color:white;
+}
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    background-color: #127a7b;
+}
+    .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+        color: #127a7b;
+        text-decoration: none;
+        background-color: white;
+    }
     .navbar-inverse .navbar-brand {
         color: white;
     }
@@ -43,15 +53,26 @@ textarea {
     .navbar-inverse .navbar-nav > li > a {
         color: white;
     }
-
+        .navbar-inverse .navbar-nav > li > a:hover {
+            border: none;
+            text-decoration: none !important;
+            font-weight:bold;
+            margin-top: 0px;
+        }
+.navbar-nav > li > .dropdown-menu {
+    background-color: #127a7b;
+    color:white;
+}
+#LoggedInUserLbl:hover {
+    border-bottom: 0px solid white;
+    margin-top: 0px;
+}
 .navbar-nav > li :hover {
-    border-bottom: 3px solid white;
-    margin-top: -3px;
+    
 }
 
 .navbar-nav > li :active {
-    border-bottom: 3px solid white;
-    margin-top: -3px;
+    
 }
 
 .hcloudBtn {
@@ -406,7 +427,20 @@ input, select, textarea {
         border: none;
         background: none;
     }
-
+.SortbyDropDown {
+    border-radius: 3px;
+    border: none;
+    outline: 0;
+    padding-left: 3px;
+    font-size: 13px;
+    color: #555555;
+}
+    .SortbyDropDown:hover, .SortbyDropDown:active {
+        border: 0.5px solid black;
+    }
+    .SortbyDropDown:focus {
+        border: 0.5px solid #127a7b;
+    }
 .RefreshFilter {
     margin: 0px;
     padding: 0px;
@@ -672,6 +706,10 @@ input, select, textarea {
     background-color: #e2f2f2;
     border-bottom: 1px solid white;
     color: black;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-height: 20px;
 }
 
 .filecard a {
@@ -749,4 +787,85 @@ input, select, textarea {
 
 .UserDataControl a.collapsed:before {
     content: "\e080";
+}
+.screenFiller {
+    pointer-events: none;
+    position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+    .screenFiller * {
+        pointer-events: all;
+    }
+.SmallProfilePicture {
+    border: 2px solid #127a7b;
+    border-radius: 100%;
+    height: 50px;
+    width: 50px;
+    transition:1s;
+}
+#IMGCover {
+    display: none;
+    transition: 1s;
+}
+.ProfileImageCover {
+    position: relative;
+    height: 100%;
+    transition: 1s;
+}
+    .ProfileImageCover:hover > #IMGCover {
+        position: absolute;
+        display: block;
+        border-radius: 100%;
+        margin: 0 auto;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        transition: 1s;
+    }
+.Profile {
+    display: inline-flex;
+    transition: 1s;
+}
+.Open {
+    display: block !important;
+    transition: 1s;
+}
+.Openpanel {
+    height: auto !important;
+    transition: 1s;
+}
+.OpenPicture {
+    height: 200px;
+    width: 200px;
+    transition: 1s;
+}
+.messagerPF {
+    display:none;
+    border-radius: 3px;
+    position: relative;
+    border: 1px solid #127a7b;
+    height: 100px;
+    width: 300px;
+    margin: 0 auto;
+    z-index: 50;
+    background: white;
+    cursor:pointer;
+}
+
+#ImgDivTopBar {
+    border-bottom: 0px solid white;
+    margin-top: 0px;
+    display:inline;
+    
+}
+#ProfileImg {
+    height: 30px;
+    width: 30px;
+    border: 1px solid white;
+    object-fit: cover;
+    border-radius: 100%;
+    margin-top: 10px;
 }

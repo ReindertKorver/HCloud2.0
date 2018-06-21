@@ -22,6 +22,15 @@ namespace HCloud.PortalContent {
         protected global::System.Web.UI.WebControls.Label FilesFrom;
         
         /// <summary>
+        /// SortBy control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList SortBy;
+        
+        /// <summary>
         /// Filtername_date control.
         /// </summary>
         /// <remarks>
@@ -65,6 +74,15 @@ namespace HCloud.PortalContent {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox FilterFileDate;
+        
+        /// <summary>
+        /// DelFilter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button DelFilter;
         
         /// <summary>
         /// SaveFilter control.

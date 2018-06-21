@@ -12,5 +12,13 @@ namespace HCloud.Entities
         public string FilePath { get; set; }
         public string FileName { get; set; }
         public DateTime Date { get; set; }
+        public enum Sortby
+        {
+            dateDESC,
+            dateASC,
+            descDESC,
+            descASC
+        }
     }
+
 }

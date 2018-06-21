@@ -48,7 +48,9 @@
                 </div>
             </div>
         </div>
-
+        <div class="FilesTopBarItem">
+            <asp:DropDownList runat="server" ID="SortBy" CssClass="SortbyDropDown" OnSelectedIndexChanged="SortBy_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
+        </div>
         <div id="Filter" onclick="ShowFilter();" class="GridviewToolbarItem">
             <i class="glyphicon glyphicon-filter"></i>Filter 
             <div style="display: inline-block;" id="Filtername_date" runat="server"></div>
@@ -61,8 +63,8 @@
     <div>
         <asp:Label runat="server" ID="Messager"></asp:Label>
     </div>
-
-    <div class="FilterGrid" id="FilterGrid">
+    <div class="screenFiller">
+    <div class="FilterGrid" id="FilterGrid" style="display: none;">
         <div>
             <div id="Dragger" onmousedown="DraggermsDown();" style="font-size: 20px; padding: 10px; padding-bottom: 0px; margin-right: 0px;">
                 Filter<div onclick="ShowFilter();" class="HCicon" style="float: right;"><i class="glyphicon glyphicon-remove"></i></div>
@@ -80,8 +82,10 @@
         </div>
         <hr style="margin: 10px;" />
         <div>
-            <asp:Button ID="SaveFilter" CausesValidation="false" runat="server" OnClick="SaveFilter_Click" class="btn hcloudBtn" Style="float: right; margin-right: 10px; margin-bottom: 10px;" Text="Opslaan"></asp:Button>
+             <asp:Button ID="DelFilter" CausesValidation="false" runat="server" OnClick="DelFilter_Click" class="btn hcloudBtn" Style="float: left; margin-left: 10px; margin-bottom: 10px;" Text="Filters verwijderen"></asp:Button>
+            <asp:Button ID="SaveFilter" CausesValidation="false" runat="server" OnClick="SaveFilter_Click" class="btn hcloudBtn" Style="float: right; margin-right: 10px; margin-bottom: 10px;" Text="Filteren"></asp:Button>
         </div>
 
     </div>
+        </div>
 </asp:Content>
