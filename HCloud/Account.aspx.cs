@@ -15,6 +15,7 @@ namespace HCloud
         public static User LoggedInUser { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
+            ProfileImageUpload.Visible = false;
             if (IsPostBack && ProfileImageUpload.PostedFile != null)
             {
                 if (ProfileImageUpload.PostedFile.FileName.Length > 0)

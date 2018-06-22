@@ -27,6 +27,10 @@
                         <br />
                         <div class="SideNavBtnBack">
                             
+                            <asp:LinkButton runat="server" ID="DashBoard" OnClick="DashBoard_Click" CssClass="SideNavBtn"><img src="/Resources/Dashboard.png"  /><span >Dashboard</span></asp:LinkButton>
+                        </div>
+                        <div class="SideNavBtnBack">
+                            
                             <asp:LinkButton runat="server" ID="ShowOwnDeseases" OnClick="ShowOwnDeseases_Click" CssClass="SideNavBtn"><img src="/Resources/Aandoening.png"  /><span >Aandoeningen</span></asp:LinkButton>
                         </div>
                         <div class="SideNavBtnBack">

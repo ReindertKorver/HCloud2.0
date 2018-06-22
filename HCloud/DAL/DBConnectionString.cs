@@ -20,7 +20,7 @@ namespace HCloud.DAL
         string password = "FFgqFUPn54No";
         string database = "hcloud";
         string port = "3306";
-        public string ConnectionString { get { return "server=" + server+ ";port="+port+";user=" + user + ";password=" + password + ";database=" + database + ";convert zero datetime=True;"; } }
+        public string ConnectionString { get { return "server=" + server1+ ";port="+port+";user=" + user1 + ";password=" + password1 + ";database=" + database1 + ";convert zero datetime=True;"; } }
         
     }
 }

@@ -11,7 +11,7 @@
                 return false;
             });
             $("#SearchFilterInput").keyup(function (e) {
-                var a =String.fromCharCode(e.which);
+                var a = String.fromCharCode(e.which);
                 var myarray = $(".filecard");
                 var arrayLength = myarray.length;
                 for (var i = 0; i < arrayLength; i++) {

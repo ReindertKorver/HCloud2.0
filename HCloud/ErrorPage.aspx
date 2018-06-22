@@ -2,10 +2,11 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <h1>Fout</h1>
-    <h4>Er is iet fout gegaan met het laden van de website, probeer later opnieuw.</h4>
+    <h4>Er is iet fout gegaan met het laden van de pagina op deze website, probeer later opnieuw.</h4>
+    <h5>Het kan ook zijn dat de pagina die door u is opgevraagd niet bestaat.</h5>
     <h2>Error:</h2>
     <p></p>
-    <asp:Label ID="FriendlyErrorMsg" runat="server" Text="Hier wordt de error weergegeven als er een error is" Font-Size="Large" style="color: red"></asp:Label>
+    <asp:Label ID="FriendlyErrorMsg" runat="server" Text="Kan error niet laden." Font-Size="Large" style="color: red"></asp:Label>
 
     <asp:Panel ID="DetailedErrorPanel" runat="server" Visible="false">
         <p>&nbsp;</p>

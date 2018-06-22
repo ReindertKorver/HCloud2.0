@@ -85,6 +85,76 @@ namespace HCloud.DAL
                 return therapies;
             }
         }
+
+        public List<Therapy> GetTherapiesFromTherapist(User user)
+        {
+            List<Therapy> therapies = new List<Therapy>();
+            using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("select therapies.ID, therapies.Description, therapies.Location,therapies.MedicationID,therapies.DeseaseID, therapies.TherapistID,therapies.Date,therapies.BSNNumber,therapies.Time," +
+                "therapies.Accepted,user.FirstName, user.LastName, medications.Description as 'MedicationDescription', deseases.Description as 'DeseaseDescription' from therapies join user on user.ID = therapies.TherapistID left join medications on medications.ID=therapies.MedicationID left join deseases on deseases.ID=therapies.DeseaseID;", con))
+            {
+
+                Entities.User result = user;
+                try
+                {
+                    con.Open();
+                    MySqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Therapy therapy = new Therapy();
+                        therapy.ID = (int)reader["ID"];
+                        therapy.description = (string)reader["Description"];
+                        therapy.date = (DateTime)reader["Date"];
+                        therapy.Time = (TimeSpan)reader["Time"];
+                        therapy.therapistID = (int)reader["TherapistID"];
+                        therapy.Accepted = (bool)reader["Accepted"];
+                        therapy.Location = (string)reader["Location"];
+                        therapy.therapistFirstName = (string)reader["FirstName"];
+                        therapy.therapistLastName = (string)reader["LastName"];
+
+                        Desease desease = new Desease();
+
+                        if (!reader.IsDBNull(reader.GetOrdinal("DeseaseDescription")))
+                        {
+                            desease.Description = (string)reader["DeseaseDescription"] ?? "";
+                        }
+                        else
+                        {
+                            desease.Description = "Geen";
+                        }
+                        Medication medication = new Medication();
+                        if (!reader.IsDBNull(reader.GetOrdinal("MedicationDescription")))
+                        {
+                            medication.Description = (string)reader["MedicationDescription"] ?? "";
+                        }
+                        else
+                        {
+                            medication.Description = "Geen";
+                        }
+
+                        List<Medication> ListMedication = new List<Medication>();
+                        ListMedication.Add(medication);
+
+
+                        List<Desease> ListDeseases = new List<Desease>();
+                        ListDeseases.Add(desease);
+
+                        therapy.Deseases = ListDeseases;
+                        therapy.Medication = ListMedication;
+                        therapies.Add(therapy);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (con.State != System.Data.ConnectionState.Closed) { con.Close(); }
+                    throw new Exception(ex.Message);
+                }
+                if (con.State != System.Data.ConnectionState.Closed) { con.Close(); }
+                return therapies;
+            }
+        }
+
+
         /// <summary>
         /// GetFilteredTherapies by Int BsnNumber and DateTime  
         /// </summary>

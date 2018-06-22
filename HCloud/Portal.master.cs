@@ -177,6 +177,12 @@ namespace HCloud
             Response.Redirect(url);
         }
 
+        protected void DashBoard_Click(object sender, EventArgs e)
+        {
+            ShowCard("/PortalContent/DashBoard");
+        }
+
+
         protected void ShowOwnDeseases_Click(object sender, EventArgs e)
         {
             ShowCard("/PortalContent/OwnDesease");

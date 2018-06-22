@@ -19,12 +19,6 @@ namespace HCloud.PortalContent
             {
                 if (!IsPostBack)
                 {
-
-
-                    //Bind de tingywingyringylingy
-
-
-
                     DAL.DBTherapyConnection dBTherapy = new DAL.DBTherapyConnection();
                     List<Therapy> therapy = dBTherapy.GetOwn((User)Session["User"]);
                     List<AgendaItem> agendaItems = ConvertTherapyToAcceptedAgendaItems(therapy);
